@@ -3,7 +3,7 @@ import { Card, CardContent } from "./card";
 
 const Skeleton = () => {
     return (
-        <Card className="p-4 w-full bg-gray-100 animate-pulse">
+        <Card className="p-4 w-full bg-gray-100 animate-pulse z-10">
             <CardContent>
                 {/* Image Skeleton */}
                 <div className="h-40 bg-gray-300 rounded-md"></div>

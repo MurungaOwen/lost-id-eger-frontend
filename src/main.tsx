@@ -6,6 +6,8 @@ import { Navbar } from './components/navbar';
 import App from './App';
 import { UploadImage } from './pages/upload';
 import { Menu, LucideSidebarClose } from 'lucide-react';
+import { ContactForm } from './pages/contact';
+import { Toaster } from 'react-hot-toast';
 
 const Main: React.FC = () => {
   const [navOpen, setNavOpen] = useState(false);
@@ -21,9 +23,11 @@ const Main: React.FC = () => {
 
       {/* Main Content Area */}
       <div className={`flex-1 transition-all duration-300 ${navOpen ? 'sm:ml-44' : 'sm:ml-14'}`}>
+        <Toaster />
         <Routes>
-          <Route path="/" element={<App />} />
+          <Route path="/" element={<App/>} />
           <Route path="/upload" element={<UploadImage />} />
+          <Route path="/contact" element={<ContactForm />} />
         </Routes>
       </div>
 

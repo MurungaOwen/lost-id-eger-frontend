@@ -2,14 +2,17 @@ import { useState, useEffect } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { SearchIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription } from "./ui/card";
 import CardSkeleton from "./ui/skeleton";
-
+import toast from "react-hot-toast";
 // Define the type for your card data
 interface CardData {
     id: number;
-    image: string;
-    description: string;
+    image_url: string;
+    contact: string;
+    reg_number: string;
+    course: string;
 }
 
 export const JumboTron = () => {
@@ -21,8 +24,16 @@ export const JumboTron = () => {
         setSearch(e.target.value);
     };
 
-    const handleSearch = () => {
-        console.log("Searching for:", search);
+    const handleSearch = async() => {
+        try{
+            const searchedCard = await fetch(`http://localhost:5000/search?reg_no=${search}`);
+            const data = await searchedCard.json()
+            setCards(data);
+            console.log("Searching for:", search);
+        }catch(err) {
+            const msg = (err instanceof Error)? err.message : "Unable to do search"
+            toast.error(msg)
+        }
     };
 
     useEffect(() => {
@@ -30,15 +41,16 @@ export const JumboTron = () => {
         const fetchCards = async () => {
             setLoading(true); // Start loading
             try {
-                const response = await fetch("/data.json");
+                //const response = await fetch("/data.json");
+                const response = await fetch("http://localhost:5000/list");
                 const data = await response.json();
-                
+                console.log("data is :", data)
                 setTimeout(() => {
-                    setCards(data); // Set the fetched data after delay
-                    setLoading(false); // Stop loading
+                    setCards(data); 
+                    setLoading(false);
                 }, 2000); // 2 second delay
             } catch (error) {
-                console.error("Error fetching cards:", error);
+                toast.error("Error fetching Id cards");
                 setLoading(false); // Stop loading in case of error
             }
         };
@@ -66,26 +78,25 @@ export const JumboTron = () => {
                 </div>
             </div>
 
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-full mt-4 pt-5 justify-center">
+            <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-full mt-4 pt-5 justify-center ${loading ? "z-10" : ""}`} >
                 {loading ? (
                     // Show skeleton loaders when loading
                     Array(20)
                         .fill(0)
                         .map((_, index) => <CardSkeleton key={index} />)
                 ) : (
-                    cards.map((card) => (
+                    cards ? cards.map((card) => (
                         <Card key={card.id} className="mt-1 overflow-hidden rounded-md">
                             <CardContent className="p-0">
                                 <img 
-                                    src={card.image} 
-                                    alt={card.description} 
+                                    src={card.image_url} 
+                                    alt={card.reg_number}
                                     className="w-full h-64 object-cover" // Ensures image fits the card
                                 />
-                                <CardDescription className="p-4 text-teal-600">{card.description}</CardDescription> {/* Add padding back to description */}
+                                <CardDescription className="p-4 text-teal-600">{card.course} : {card.reg_number}</CardDescription> {/* Add padding back to description */}
                             </CardContent>
                         </Card>
-                    ))
+                    )) : <p>No Ids have been added yet:) clicke here to upload<Link to="/upload"/></p>
                     
                 )}
             </div>
