@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Upload } from "lucide-react";
 import toast from "react-hot-toast";
+
+const baseApi=import.meta.env.VITE_BASE_API;
+
 export function UploadImage() {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
@@ -24,11 +27,11 @@ export function UploadImage() {
         const formData = new FormData();
         formData.append("file", selectedFile);
         formData.append("contact", contactInfo.phone);
-
+        console.log(`file is ${selectedFile.name} and size is: ${selectedFile.size}`)
         setLoading(true);
 
         try {
-            const response = await fetch("http://localhost:5000/upload", {
+            const response = await fetch(`${baseApi}/upload`, {
                 method: "POST",
                 body: formData,
             });

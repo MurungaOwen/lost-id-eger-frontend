@@ -35,14 +35,14 @@ export const JumboTron = () => {
             toast.error(msg)
         }
     };
-
+    const baseApi=import.meta.env.VITE_BASE_API;
     useEffect(() => {
         // Simulate delayed fetch with setTimeout to see skeleton first
         const fetchCards = async () => {
             setLoading(true); // Start loading
             try {
                 //const response = await fetch("/data.json");
-                const response = await fetch("http://localhost:5000/list");
+                const response = await fetch(`${baseApi}/list`);
                 const data = await response.json();
                 console.log("data is :", data)
                 setTimeout(() => {
