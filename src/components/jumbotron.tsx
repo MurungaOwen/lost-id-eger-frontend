@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription } from "./ui/card";
 import CardSkeleton from "./ui/skeleton";
 import toast from "react-hot-toast";
+
+const baseApi=import.meta.env.VITE_BASE_API;
 // Define the type for your card data
 interface CardData {
     id: number;
@@ -26,7 +28,7 @@ export const JumboTron = () => {
 
     const handleSearch = async() => {
         try{
-            const searchedCard = await fetch(`http://localhost:5000/search?reg_no=${search}`);
+            const searchedCard = await fetch(`${baseApi}/search?reg_no=${search}`);
             const data = await searchedCard.json()
             setCards(data);
             console.log("Searching for:", search);
@@ -35,10 +37,11 @@ export const JumboTron = () => {
             toast.error(msg)
         }
     };
-    const baseApi=import.meta.env.VITE_BASE_API;
+
     useEffect(() => {
         // Simulate delayed fetch with setTimeout to see skeleton first
         const fetchCards = async () => {
+            console.log("base APi is :", baseApi)
             setLoading(true); // Start loading
             try {
                 //const response = await fetch("/data.json");
