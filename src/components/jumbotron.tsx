@@ -13,7 +13,7 @@ interface CardData {
     id: number;
     image_url: string;
     contact: string;
-    reg_number: string;
+    reg_no: string;
     course: string;
 }
 
@@ -88,18 +88,18 @@ export const JumboTron = () => {
                         .fill(0)
                         .map((_, index) => <CardSkeleton key={index} />)
                 ) : (
-                    cards ? cards.map((card) => (
+                    cards.length > 0  ? cards.map((card) => (
                         <Card key={card.id} className="mt-1 overflow-hidden rounded-md">
                             <CardContent className="p-0">
                                 <img 
                                     src={card.image_url} 
-                                    alt={card.reg_number}
+                                    alt={card.reg_no}
                                     className="w-full h-64 object-cover" // Ensures image fits the card
                                 />
-                                <CardDescription className="p-4 text-teal-600">{card.course} : {card.reg_number}</CardDescription> {/* Add padding back to description */}
+                                <CardDescription className="p-4 text-teal-600">{card.course} : {card.reg_no}</CardDescription> {/* Add padding back to description */}
                             </CardContent>
                         </Card>
-                    )) : <p>No Ids have been added yet:) clicke here to upload<Link to="/upload"/></p>
+                    )) : <p>No Ids have been added yet :) click here to upload<Link to="/upload"/></p>
                     
                 )}
             </div>
